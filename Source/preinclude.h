@@ -39,12 +39,14 @@
 // one of this boards
 // #define HAL_BOARD_TARGET
 // #define HAL_BOARD_CHDTECH_DEV
+// #define HAL_BOARD_MODKAM
 
-#if !defined(HAL_BOARD_TARGET) && !defined(HAL_BOARD_CHDTECH_DEV)
+
+#if !defined(HAL_BOARD_TARGET) && !defined(HAL_BOARD_CHDTECH_DEV) && !defined(HAL_BOARD_MODKAM) 
 #error "Board type must be defined"
 #endif
 
-#if defined(HAL_BOARD_TARGET)
+#if defined(HAL_BOARD_TARGET) || defined(HAL_BOARD_MODKAM) 
     #define INT_HEAP_LEN (2256 - 0xE)
     #define HAL_UART FALSE
 #elif defined(HAL_BOARD_CHDTECH_DEV)

@@ -33,7 +33,6 @@ extern "C" {
 #define ALL_PUMPS_ENDPOINT            4
 #define BEEPER_ENDPOINT               5
 #define WATER_LEAK_ENDPOINT           6
-//#define EMPTY_TANK_ENDPOINT           7
 
 /*********************************************************************
  * MACROS
@@ -70,7 +69,7 @@ extern "C" {
 typedef struct {
     uint32  TimeLow;
     uint32  TimeHigh;
-    uint8   PumpDurations[4];
+    uint16  PumpDurations[3];
     bool    BeeperOnLeak;
 } application_config_t;
 

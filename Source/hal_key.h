@@ -66,6 +66,9 @@ extern "C"
 #define HAL_KEY_STATE_NORMAL          0x00
 #define HAL_KEY_STATE_SHIFT           0x01
 
+#define HAL_KEY_PRESS 0x20
+#define HAL_KEY_RELEASE 0x40
+
 #define HAL_KEY_SW_1 0x01  
 #define HAL_KEY_SW_2 0x02  
 #define HAL_KEY_SW_3 0x04  

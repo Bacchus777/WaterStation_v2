@@ -48,15 +48,25 @@ const uint8 zclApp_ApplicationVersion = 3;
 const uint8 zclApp_StackVersion = 4;
 
 const uint8 zclApp_ManufacturerName[] = {7, 'B', 'a', 'c', 'c', 'h', 'u', 's'};
+#if defined HAL_BOARD_MODKAM
 const uint8 zclApp_ModelId[] = {13, 'W', 'a', 't', 'e', 'r', '_', 'S', 't', 'a', 't', 'i', 'o', 'n'};
+
 const uint8 zclApp_PowerSource = POWER_SOURCE_MAINS_1_PHASE;
 
 #define DEFAULT_TimeLow           0
 #define DEFAULT_TimeHigh          0
 #define DEFAULT_Duration          30
-#define DEFAULT_BeeperOnLeak      FALSE;
+#define DEFAULT_BeeperOnLeak      FALSE
 
-application_config_t zclApp_Config;
+application_config_t zclApp_Config = {
+    .TimeLow           = DEFAULT_TimeLow,
+    .TimeHigh          = DEFAULT_TimeHigh,
+    .BeeperOnLeak      = DEFAULT_BeeperOnLeak,
+    .PumpDurations[0]  = DEFAULT_Duration,
+    .PumpDurations[1]  = DEFAULT_Duration,
+    .PumpDurations[2]  = DEFAULT_Duration
+};
+
 uint32  zclApp_GenTime_TimeUTC = 0;
 
 bool zclApp_Pumps[4] = {FALSE, FALSE, FALSE, FALSE};

@@ -193,7 +193,8 @@ static void zclApp_HandleKeys(byte portAndAction, byte keyCode)
 
   LREP("keyCode =0x%x \r\n", keyCode);
 
-  if (keyCode & HAL_KEY_SW_1){
+  if ((keyCode & HAL_KEY_SW_1) || (portAndAction & HAL_KEY_RELEASE)){
+//  if (keyCode & HAL_KEY_SW_1){
     zclFactoryResetter_HandleKeys(portAndAction, keyCode);
     zclCommissioning_HandleKeys(portAndAction, keyCode);
   }
@@ -202,7 +203,10 @@ static void zclApp_HandleKeys(byte portAndAction, byte keyCode)
     if (zclApp_Alarm & SS_IAS_ZONE_STATUS_ALARM1_ALARMED) {
       zclApp_Alarm = 0x0;//^= SS_IAS_ZONE_STATUS_ALARM1_ALARMED;
       zclApp_SendChangeNotification(WATER_LEAK_ENDPOINT, zclApp_Alarm);
-      HalLedSet(HAL_LED_5, HAL_LED_MODE_OFF);
+      if (zclApp_Beeper && zclApp_Config.BeeperOnLeak) {
+        zclApp_Beeper = FALSE;
+        HalLedSet(HAL_LED_5, HAL_LED_MODE_OFF);
+      }
       zclGeneral_SendOnOff_CmdOff(zclApp_WaterLeakEP.EndPoint, &inderect_DstAddr, TRUE, bdb_getZCLFrameCounter());
     }
     else {
@@ -337,6 +341,9 @@ static void zclApp_SaveAttributesToNV(void) {
     uint8 writeStatus = osal_nv_write(NW_APP_CONFIG, 0, sizeof(application_config_t), &zclApp_Config);
     LREP("Saving attributes to NV write=%d\r\n", writeStatus);
     LREP("Beeper=%d\r\n", zclApp_Config.BeeperOnLeak);
+    LREP("dur1=%d\r\n", zclApp_Config.PumpDurations[0]);
+    LREP("dur2=%d\r\n", zclApp_Config.PumpDurations[1]);
+    LREP("dur3=%d\r\n", zclApp_Config.PumpDurations[2]);
 }
 
 static void zclApp_RestoreAttributesFromNV(void) {
@@ -406,7 +413,7 @@ static void zclApp_OnOffCB(uint8 cmd)
 
   }
   
-  zclApp_Pumps[3] = zclApp_Pumps[0] & zclApp_Pumps[1] % zclApp_Pumps[2];
+  zclApp_Pumps[3] = zclApp_Pumps[0] && zclApp_Pumps[1] && zclApp_Pumps[2];
   
     for(int i = 0; i < PUMPS; i++ )
       zclApp_ApplyPump(i, zclApp_Pumps[i]);
