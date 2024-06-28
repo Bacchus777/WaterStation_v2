@@ -183,7 +183,6 @@ void zclApp_Init(byte task_id) {
 
     osal_start_reload_timer(zclApp_TaskID, APP_REPORT_EVT, APP_REPORT_DELAY);
     osal_start_reload_timer(zclApp_TaskID, HAL_KEY_EVENT, 100);
-
 }
 
 static void zclApp_HandleKeys(byte portAndAction, byte keyCode) 

@@ -48,7 +48,6 @@ const uint8 zclApp_ApplicationVersion = 3;
 const uint8 zclApp_StackVersion = 4;
 
 const uint8 zclApp_ManufacturerName[] = {7, 'B', 'a', 'c', 'c', 'h', 'u', 's'};
-#if defined HAL_BOARD_MODKAM
 const uint8 zclApp_ModelId[] = {13, 'W', 'a', 't', 'e', 'r', '_', 'S', 't', 'a', 't', 'i', 'o', 'n'};
 
 const uint8 zclApp_PowerSource = POWER_SOURCE_MAINS_1_PHASE;
