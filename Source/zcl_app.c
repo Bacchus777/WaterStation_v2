@@ -141,6 +141,8 @@ static zclSS_AppCallbacks_t zclApp_SSCmdCallbacks =
 
 void zclApp_Init(byte task_id) {
 
+//    IO_PUD_PORT(0, IO_PUP);
+    IO_PUD_PORT(1, IO_PDN);
     zclApp_RestoreAttributesFromNV();
 
     zclApp_TaskID = task_id;
@@ -233,13 +235,10 @@ static void zclApp_HandleKeys(byte portAndAction, byte keyCode)
 
   if (zclApp_Alarm & SS_IAS_ZONE_STATUS_ALARM1_ALARMED) {
     for(int i = 1; i <= PUMPS; i++ ){
-      hal_key_sw = 1 << i;
-      if (keyCode & hal_key_sw){
         pump = i - 1;
         zclApp_Pumps[pump] = FALSE;
         zclApp_ApplyPump(pump, zclApp_Pumps[pump]);
       }
-    }
 
     
     if (zclApp_Config.BeeperOnLeak) {
@@ -425,7 +424,7 @@ static void zclApp_ApplyPump(uint8 pump, bool value)
 {
   HalLedSet(1 << (pump + 1), value ? HAL_LED_MODE_ON : HAL_LED_MODE_OFF);
   if (value & (zclApp_Config.PumpDurations[pump] > 0))
-    osal_start_timerEx(zclApp_TaskID, 1 << (2 + pump), zclApp_Config.PumpDurations[pump] * 1000);
+    osal_start_timerEx(zclApp_TaskID, 1 << (2 + pump), ((uint32)zclApp_Config.PumpDurations[pump] * (uint32)1000));
 }
 
 static void zclApp_StopPump(uint16 timer)

@@ -55,6 +55,8 @@
   #define HAL_NUM_LEDS            5
 #elif defined(HAL_BOARD_TARGET)
   #define HAL_NUM_LEDS            5
+#elif defined(HAL_BOARD_MODKAM)
+  #define HAL_NUM_LEDS            5
 #else
   #error Unknown Board Indentifier
 #endif
@@ -62,7 +64,34 @@
 #define HAL_LED_BLINK_DELAY()   st( { volatile uint32 i; for (i=0; i<0x5800; i++) { }; } )
 
 
-//#if defined(HAL_BOARD_TARGET)
+#if defined(HAL_BOARD_TARGET)
+
+#define LED1_BV           BV(1)
+#define LED1_SBIT         P0_1
+#define LED1_DDR          P0DIR
+#define LED1_POLARITY     ACTIVE_HIGH
+
+#define LED2_BV           BV(5)
+#define LED2_SBIT         P1_5
+#define LED2_DDR          P1DIR
+#define LED2_POLARITY     ACTIVE_HIGH
+  
+#define LED3_BV           BV(3)
+#define LED3_SBIT         P1_3
+#define LED3_DDR          P1DIR
+#define LED3_POLARITY     ACTIVE_HIGH
+
+#define LED4_BV           BV(2)
+#define LED4_SBIT         P1_2
+#define LED4_DDR          P1DIR
+#define LED4_POLARITY     ACTIVE_HIGH
+
+#define LED5_BV           BV(0)
+#define LED5_SBIT         P1_0
+#define LED5_DDR          P1DIR
+#define LED5_POLARITY     ACTIVE_HIGH
+
+#elif defined (HAL_BOARD_MODKAM)
 
 #define LED1_BV           BV(1)
 #define LED1_SBIT         P0_1
@@ -89,35 +118,8 @@
 #define LED5_DDR          P1DIR
 #define LED5_POLARITY     ACTIVE_HIGH
 
-/*#elif defined (HAL_BOARD_CHDTECH_DEV)
-
-#define LED1_BV           BV(4)
-#define LED1_SBIT         P1_4
-#define LED1_DDR          P1DIR
-#define LED1_POLARITY     ACTIVE_LOW
-
-#define LED2_BV           BV(1)
-#define LED2_SBIT         P1_1
-#define LED2_DDR          P1DIR
-#define LED2_POLARITY     ACTIVE_LOW
-
-#define LED3_BV           BV(0)
-#define LED3_SBIT         P1_0
-#define LED3_DDR          P1DIR
-#define LED3_POLARITY     ACTIVE_LOW
-
-#define LED4_BV           BV(4)
-#define LED4_SBIT         P1_4
-#define LED4_DDR          P1DIR
-#define LED4_POLARITY     ACTIVE_LOW
-
-#define LED5_BV           BV(5)
-#define LED5_SBIT         P1_5
-#define LED5_DDR          P1DIR
-#define LED5_POLARITY     ACTIVE_HIGH
-
 #endif
-*/
+
 
 
 /* ------------------------------------------------------------------------------------------------
@@ -312,7 +314,8 @@ extern void MAC_RfFrontendSetup(void);
 
 /* ----------- Push Buttons ---------- */
 
-#if defined(HAL_BOARD_CHDTECH_DEV)
+/////////////////////// SW1 /////////////////////// 
+
 /* SW1 is at P2.0 */
 #define HAL_KEY_SW_1_PORT   P2
 #define HAL_KEY_SW_1_SBIT   P2_0
@@ -325,21 +328,6 @@ extern void MAC_RfFrontendSetup(void);
 #define HAL_KEY_SW_1_EDGEBIT  BV(0)
 #define HAL_KEY_SW_1_EDGE     HAL_KEY_FALLING_EDGE
 
-#elif defined(HAL_BOARD_TARGET)
-/* SW1 is at P0.4 */
-#define HAL_KEY_SW_1_PORT   P0
-#define HAL_KEY_SW_1_SBIT   P0_4
-#define HAL_KEY_SW_1_BIT    BV(4)
-#define HAL_KEY_SW_1_SEL    P0SEL
-#define HAL_KEY_SW_1_DIR    P0DIR
-#define HAL_KEY_SW_1_POLARITY      ACTIVE_LOW
-
-/* edge interrupt */
-#define HAL_KEY_SW_1_EDGEBIT  BV(0)
-#define HAL_KEY_SW_1_EDGE     HAL_KEY_FALLING_EDGE
-
-#endif
-
 /* SW_1 interrupts */
 #define HAL_KEY_SW_1_IEN      IEN1  /* CPU interrupt mask register */
 #define HAL_KEY_SW_1_IENBIT   BV(1) /* Mask bit for all of Port_0 */
@@ -348,6 +336,9 @@ extern void MAC_RfFrontendSetup(void);
 #define HAL_KEY_SW_1_PXIFG    P0IFG /* Interrupt flag at source */
 
 
+/////////////////////// SW2 /////////////////////// 
+
+#if defined(HAL_BOARD_CHDTECH_DEV) 
 
 /* SW2 is at P2.0 */
 #define HAL_KEY_SW_2_PORT   P2
@@ -361,12 +352,33 @@ extern void MAC_RfFrontendSetup(void);
 #define HAL_KEY_SW_2_EDGEBIT  BV(0)
 #define HAL_KEY_SW_2_EDGE     HAL_KEY_FALLING_EDGE
 
+#elif defined(HAL_BOARD_MODKAM) || defined(HAL_BOARD_TARGET)
+
+/* SW2 is at P2.0 */
+#define HAL_KEY_SW_2_PORT   P0
+#define HAL_KEY_SW_2_SBIT   P0_4
+#define HAL_KEY_SW_2_BIT    BV(4)
+#define HAL_KEY_SW_2_SEL    P0SEL
+#define HAL_KEY_SW_2_DIR    P0DIR
+#define HAL_KEY_SW_2_POLARITY      ACTIVE_LOW
+
+/* edge interrupt */
+#define HAL_KEY_SW_2_EDGEBIT  BV(0)
+#define HAL_KEY_SW_2_EDGE     HAL_KEY_FALLING_EDGE
+
+#endif
+
 /* SW_2 interrupts */
 #define HAL_KEY_SW_2_IEN      IEN1  /* CPU interrupt mask register */
 #define HAL_KEY_SW_2_IENBIT   BV(1) /* Mask bit for all of Port_0 */
 #define HAL_KEY_SW_2_ICTL     P0IEN /* Port Interrupt Control register */
 #define HAL_KEY_SW_2_ICTLBIT  BV(3) /* P0IEN - P0.1 enable/disable bit */
 #define HAL_KEY_SW_2_PXIFG    P0IFG /* Interrupt flag at source */
+
+
+/////////////////////// SW3 /////////////////////// 
+
+#if defined(HAL_BOARD_CHDTECH_DEV) 
 
 /* SW3 is at P0.6 */
 #define HAL_KEY_SW_3_PORT   P0
@@ -380,12 +392,32 @@ extern void MAC_RfFrontendSetup(void);
 #define HAL_KEY_SW_3_EDGEBIT  BV(0)
 #define HAL_KEY_SW_3_EDGE     HAL_KEY_FALLING_EDGE
 
+#elif defined(HAL_BOARD_MODKAM) || defined(HAL_BOARD_TARGET)
+/* SW3 is at P0.5 */ 
+#define HAL_KEY_SW_3_PORT   P0
+#define HAL_KEY_SW_3_SBIT   P0_5
+#define HAL_KEY_SW_3_BIT    BV(5)
+#define HAL_KEY_SW_3_SEL    P0SEL
+#define HAL_KEY_SW_3_DIR    P0DIR
+#define HAL_KEY_SW_3_POLARITY      ACTIVE_LOW
+
+/* edge interrupt */
+#define HAL_KEY_SW_3_EDGEBIT  BV(0)
+#define HAL_KEY_SW_3_EDGE     HAL_KEY_FALLING_EDGE
+
+#endif
+
 /* SW_3 interrupts */
 #define HAL_KEY_SW_3_IEN      IEN1  /* CPU interrupt mask register */
 #define HAL_KEY_SW_3_IENBIT   BV(1) /* Mask bit for all of Port_0 */
 #define HAL_KEY_SW_3_ICTL     P0IEN /* Port Interrupt Control register */
 #define HAL_KEY_SW_3_ICTLBIT  BV(3) /* P0IEN - P0.1 enable/disable bit */
 #define HAL_KEY_SW_3_PXIFG    P0IFG /* Interrupt flag at source */
+
+
+/////////////////////// SW4 /////////////////////// 
+
+#if defined(HAL_BOARD_CHDTECH_DEV) 
 
 /* SW4 is at P0.5 */
 #define HAL_KEY_SW_4_PORT   P0
@@ -398,6 +430,22 @@ extern void MAC_RfFrontendSetup(void);
 /* edge interrupt */
 #define HAL_KEY_SW_4_EDGEBIT  BV(0)
 #define HAL_KEY_SW_4_EDGE     HAL_KEY_FALLING_EDGE
+
+#elif defined(HAL_BOARD_MODKAM) || defined(HAL_BOARD_TARGET)
+
+/* SW4 is at P0.6 */
+#define HAL_KEY_SW_4_PORT   P0
+#define HAL_KEY_SW_4_SBIT   P0_6
+#define HAL_KEY_SW_4_BIT    BV(6)
+#define HAL_KEY_SW_4_SEL    P0SEL
+#define HAL_KEY_SW_4_DIR    P0DIR
+#define HAL_KEY_SW_4_POLARITY      ACTIVE_LOW
+
+/* edge interrupt */
+#define HAL_KEY_SW_4_EDGEBIT  BV(0)
+#define HAL_KEY_SW_4_EDGE     HAL_KEY_FALLING_EDGE
+
+#endif
 
 /* SW_4 interrupts */
 #define HAL_KEY_SW_4_IEN      IEN1  /* CPU interrupt mask register */
@@ -427,7 +475,7 @@ extern void MAC_RfFrontendSetup(void);
 #define HAL_KEY_SW_5_PXIFG    P0IFG /* Interrupt flag at source */
 
 /* SW6 is at P0.3 */
-#if defined(HAL_BOARD_TARGET)
+#if defined(HAL_BOARD_TARGET) || defined(HAL_BOARD_MODKAM)
 
 #define HAL_KEY_SW_6_PORT   P0
 #define HAL_KEY_SW_6_SBIT   P0_3

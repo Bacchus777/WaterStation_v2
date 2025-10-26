@@ -48,7 +48,11 @@ const uint8 zclApp_ApplicationVersion = 3;
 const uint8 zclApp_StackVersion = 4;
 
 const uint8 zclApp_ManufacturerName[] = {7, 'B', 'a', 'c', 'c', 'h', 'u', 's'};
+#ifndef HAL_BOARD_MODKAM
 const uint8 zclApp_ModelId[] = {13, 'W', 'a', 't', 'e', 'r', '_', 'S', 't', 'a', 't', 'i', 'o', 'n'};
+#else
+const uint8 zclApp_ModelId[] = {20, 'W', 'a', 't', 'e', 'r', '_', 'S', 't', 'a', 't', 'i', 'o', 'n', '.', 'M', 'o', 'd', 'k', 'a', 'm'};
+#endif
 
 const uint8 zclApp_PowerSource = POWER_SOURCE_MAINS_1_PHASE;
 
@@ -289,7 +293,6 @@ CONST zclAttrRec_t zclApp_AttrsWaterLeakEP[] = {
 uint8 CONST zclApp_AttrsWaterLeakEPCount = (sizeof(zclApp_AttrsWaterLeakEP) / sizeof(zclApp_AttrsWaterLeakEP[0]));
 
 const cId_t zclApp_InClusterListWaterLeakEP[] = {
-  GEN_ON_OFF, 
   ZCL_CLUSTER_ID_SS_IAS_ZONE,
 };
 
